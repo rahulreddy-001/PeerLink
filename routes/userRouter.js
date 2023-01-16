@@ -14,13 +14,14 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/signup", (req, res, next) => {
-  console.log(req.body);
   User.register(
-    new User({ username: req.body.username, name: req.body.name }),
+    new User({
+      username: req.body.username,
+    }),
     req.body.password,
     (err, user) => {
       if (err) {
-        res.statusCode = 500;
+        res.statusCode = 401;
         res.setHeader("Content-Type", "application/json");
         res.json({ success: false, error: err });
       } else {
@@ -37,14 +38,29 @@ router.post("/signup", (req, res, next) => {
   );
 });
 
-router.post("/signin", passport.authenticate("local"), (req, res, next) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.json({
-    success: true,
-    status: "You are successfully logged in!",
-  });
-});
+router.post(
+  "/signin",
+  passport.authenticate("local", { failWithError: true }),
+  (req, res, next) => {
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json({
+      success: true,
+      status: "You are successfully logged in!",
+    });
+  },
+  (err, req, res, next) => {
+    res.statusCode = 401;
+    res.setHeader("Content-Type", "application/json");
+    res.json({
+      success: false,
+      error: {
+        name: "InvalidCredentials",
+        message: "Invalid username or password",
+      },
+    });
+  }
+);
 
 router.get("/signout", (req, res, next) => {
   try {

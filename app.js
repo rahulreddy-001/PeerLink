@@ -1,18 +1,27 @@
 var createError = require("http-errors");
 var express = require("express");
+var cors = require("cors");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var session = require("express-session");
-var FileStore = require("session-file-store")(session);
 var passport = require("passport");
+var session = require("express-session");
+var MongoDBStore = require("connect-mongodb-session")(session);
 
-var mongoose = require("mongoose");
 var mongoUrl = require("./config").mongoUrl;
-mongoose.set("strictQuery", true);
 var secretKey = require("./config").secretKey;
 
-var indexRouter = require("./routes/index");
+var store = new MongoDBStore({
+  uri: mongoUrl,
+  collection: "userSessions",
+});
+
+var mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
+
+var indexRouter = require("./routes/indexRouter");
 var usersRouter = require("./routes/userRouter");
+var friendsRouter = require("./routes/friendsRouter");
+var chatRouter = require("./routes/chatRouter");
 
 mongoose
   .connect(mongoUrl)
@@ -23,31 +32,35 @@ mongoose
     console.log("Error connecting to DB");
   });
 var app = express();
-
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(
   session({
     name: "session-id",
     secret: secretKey,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
     saveUninitialized: false,
-    resave: false,
-    store: new FileStore(),
+    resave: true,
+    store: store,
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/user", usersRouter);
 app.use(auth);
-app.get("/test", (req, res, next) => {
-  res.send("This is test message");
-});
+app.use("/api/friends", friendsRouter);
+app.use("/api/chat", chatRouter);
+
 function auth(req, res, next) {
-  console.log(req.user);
   if (!req.user) {
     var err = new Error("You are not authenticated!");
     err.status = 403;

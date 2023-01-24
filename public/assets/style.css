@@ -1,0 +1,207 @@
+body {
+  background-color: rgb(30, 30, 30);
+  color: white;
+  font-size: 17px;
+  font-family: monospace;
+}
+.con {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.fl {
+  border: solid 2px green;
+  height: 100%;
+  width: 32%;
+  margin: 10px;
+  display: grid;
+  grid-template-rows: 2fr 1fr 40fr 1fr;
+}
+.un {
+  border-bottom: solid 2px green;
+  padding: 10px;
+  text-align: left;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.un span {
+  background-color: yellow;
+  color: rebeccapurple;
+  padding: 3px;
+}
+.f {
+  padding: 5px;
+  border-top: solid 2px green;
+  border-bottom: solid 2px green;
+  overflow-y: scroll;
+}
+.fi {
+  border: solid 0.1px white;
+  margin: 1px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.fi:hover {
+  cursor: pointer;
+  border: solid 0.1px green;
+  background-color: white;
+  color: black;
+}
+.lb {
+  background-color: navy;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 17px;
+  color: white;
+}
+.nu {
+  margin: 10px;
+  border: solid 0.1px green;
+  display: flex;
+}
+.nu input {
+  width: 200%;
+  height: 24px;
+  outline: none;
+  padding-left: 10px;
+  font-size: 17px;
+  background-color: black;
+  color: rgb(220, 220, 220);
+}
+
+.is {
+  background-color: green;
+  color: white;
+  width: 100px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.rip {
+  border: solid 0.1px white;
+  display: flex;
+}
+.rip input {
+  width: 100%;
+  height: 24px;
+  outline: none;
+  padding-left: 10px;
+  font-size: 17px;
+  background-color: black;
+  color: rgb(220, 220, 220);
+}
+.ripis {
+  background-color: green;
+  color: white;
+  width: 150px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.mb {
+  border: solid 2px green;
+  height: 100%;
+  width: 70%;
+  display: grid;
+  grid-template-rows: 1fr 20fr 1fr;
+}
+
+.cu {
+  border-bottom: solid 2px green;
+  padding: 5px;
+  text-align: left;
+  color: yellow;
+}
+.ofs {
+  font-size: 12px;
+  color: white;
+}
+.ofsw {
+  display: flex;
+  align-items: center;
+}
+.cir {
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  margin: 0px 5px;
+  background-color: white;
+}
+.inpm {
+  border: solid 0.1px green;
+  display: flex;
+}
+.inpm input {
+  width: 200%;
+  height: 24px;
+  outline: none;
+  padding-left: 10px;
+  font-size: 17px;
+  background-color: black;
+  color: rgb(220, 220, 220);
+}
+
+.cb {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.cmb {
+  padding: 5px;
+}
+.to {
+  text-align: right;
+  padding: 3px;
+}
+.to span {
+  background-color: rgba(0, 0, 156, 0.593);
+}
+.fm span {
+  background-color: rgba(181, 172, 0, 0.673);
+  padding: 3px;
+}
+.ts {
+  margin-top: 5px;
+  font-size: 10px;
+  color: white;
+}
+.inpis {
+  background-color: green;
+  color: white;
+  width: 150px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(169, 169, 169);
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 750px) {
+  .con {
+    display: block;
+    width: 90vw;
+    height: 90vh;
+  }
+  .fl {
+    width: 100%;
+    margin: 0px;
+    padding: 0;
+    height: 50vh;
+  }
+  .mb {
+    margin-top: 10px;
+    width: 100%;
+  }
+}

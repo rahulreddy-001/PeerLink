@@ -18,7 +18,6 @@ var store = new MongoDBStore({
 var mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 
-var indexRouter = require("./routes/indexRouter");
 var usersRouter = require("./routes/userRouter");
 var friendsRouter = require("./routes/friendsRouter");
 var chatRouter = require("./routes/chatRouter");
@@ -32,7 +31,7 @@ mongoose
     console.log("Error connecting to DB");
   });
 var app = express();
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -54,7 +53,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", indexRouter);
+app.use(express.static("public"));
 app.use("/user", usersRouter);
 app.use(auth);
 app.use("/api/friends", friendsRouter);

@@ -50,6 +50,8 @@ router.post(
     });
   },
   (err, req, res, next) => {
+    console.log(req.body);
+
     res.statusCode = 401;
     res.setHeader("Content-Type", "application/json");
     res.json({

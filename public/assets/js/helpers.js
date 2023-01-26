@@ -1,9 +1,12 @@
 import state from "./state.js";
 import query from "./query.js";
+import socket from "./socket.js";
+
 export default {
   init() {
     query.getFriends();
     this.addUserId();
+    socket.init();
   },
   scrollChatBodyBottom() {
     const scrollDiv = document.querySelector(".cb");
@@ -28,6 +31,7 @@ export default {
         chatListDiv.append(tempDiv);
 
         tempDiv.addEventListener("click", (e) => {
+          state.setIsRoom(false);
           this.handleCurrentId(item);
         });
       });
@@ -48,9 +52,9 @@ export default {
     ofs.innerText = `${state.id} ${state.idStatus}`;
   },
 
-  appendMessageBodyChat(chat) {
+  addMessageBodyChat(chat) {
     const messageBody = document.querySelector(".cb");
-    let userLabel = chat.from === state.user ? "you" : state.id;
+    let userLabel = chat.from === state.user ? "you" : chat.from;
     let classLabel = chat.from === state.user ? "to" : "fm";
     let msg = chat.message;
     let moment = new Date(chat.createdAt);
@@ -65,22 +69,17 @@ export default {
         `;
     messageDiv.innerHTML = innerHTML;
     messageBody.append(messageDiv);
+    this.scrollChatBodyBottom();
   },
 
   addMessageBodyChats(data) {
     try {
       const messageBody = document.querySelector(".cb");
       messageBody.innerHTML = "";
-      data.chats.map((chat) => this.appendMessageBodyChat(chat));
-      this.scrollChatBodyBottom();
+      data.chats.map((chat) => this.addMessageBodyChat(chat));
     } catch (e) {
       console.log(e);
     }
-  },
-
-  addMessageBodyChat(chat) {
-    this.appendMessageBodyChat(chat);
-    this.scrollChatBodyBottom();
   },
 
   handleCurrentId(id) {
@@ -91,14 +90,14 @@ export default {
     query.getChat();
   },
 
-  raiseError(errMsg) {
+  raiseError(errMsg, time = 3000) {
     const errEle = document.querySelector(".err");
     var errMsgEle = document.createElement("span");
     errMsgEle.textContent = errMsg;
     errEle.append(errMsgEle);
     setTimeout(() => {
       errMsgEle.remove();
-    }, 2000);
+    }, time);
   },
 
   addNewUser(data) {
@@ -115,5 +114,18 @@ export default {
     } else {
       console.log("Something went wrong");
     }
+  },
+
+  putRoomChat(chat) {
+    this.addMessageBodyChat(chat);
+  },
+
+  handleRoomJoin(roomId) {
+    socket.addToRoom(roomId);
+    state.id = roomId;
+    document.querySelector(".mb").style.opacity = "1";
+    this.setRoomName();
+    this.addMessageBodyChats({ chats: [] });
+    this.updateChatUserStatus();
   },
 };

@@ -2,25 +2,48 @@ import state from "./state.js";
 import helper from "./helpers.js";
 
 export default {
-  socket: null,
+  root: null,
+  room: null,
   init() {
-    const socket = io();
-    socket.on("connect", () => {
-      socket.emit("add", { user: state.user });
+    const root = io("/");
+    const room = io("/room");
+
+    root.on("connect", () => {
+      root.emit("add", { user: state.user });
     });
 
-    socket.on("message", (data) => {
-      data = data.message;
+    root.on("message", (data) => {
       if (data.from === state.id) {
         helper.addMessageBodyChat(data);
       } else {
         console.log(data);
       }
     });
-    this.socket = socket;
+
+    room.on("message", (data) => {
+      if (data.room === state.id) {
+        helper.addMessageBodyChat(data.message);
+      } else {
+        console.log(data);
+      }
+    });
+    this.root = root;
+    this.room = room;
   },
 
   emitMessage(msg) {
-    this.socket.emit("message", msg);
+    this.root.emit("message", msg);
+  },
+
+  addToRoom(room) {
+    helper.raiseError(
+      "Room chats will be cleared permanently, When you leave the room.",
+      10000
+    );
+    helper.raiseError("Share roomid to invite others to this room.", 10000);
+    this.room.emit("add", { room: room });
+  },
+  emitRoomMessage(msg) {
+    this.room.emit("message", { room: state.id, message: msg });
   },
 };

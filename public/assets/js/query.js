@@ -1,19 +1,26 @@
 import state from "./state.js";
 import helper from "./helpers.js";
 
-window.addEventListener("load", () => {
-  //   function testAPI() {}
-  //   testAPI();
-});
 export default {
+  async initializeAll() {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+    fetch("/api/user", requestOptions).then((response) =>
+      response.json().then((data) => {
+        state.setCurrentUser(data.user);
+      })
+    );
+  },
+
   async getFriends() {
     var requestOptions = {
       method: "GET",
       redirect: "follow",
     };
-    fetch("http://localhost:5000/api/friends", requestOptions).then(
-      (response) =>
-        response.json().then((data) => helper.updateFriendsList(data))
+    fetch("/api/friends", requestOptions).then((response) =>
+      response.json().then((data) => helper.updateFriendsList(data))
     );
   },
 
@@ -23,9 +30,8 @@ export default {
       redirect: "follow",
     };
 
-    fetch(`http://localhost:5000/api/chat/${state.id}`, requestOptions).then(
-      (response) =>
-        response.json().then((data) => helper.addMessageBodyChats(data))
+    fetch(`/api/chat/${state.id}`, requestOptions).then((response) =>
+      response.json().then((data) => helper.addMessageBodyChats(data))
     );
   },
 
@@ -42,9 +48,8 @@ export default {
       body: raw,
       redirect: "follow",
     };
-    fetch(`http://localhost:5000/api/chat/${state.id}`, requestOptions).then(
-      (response) =>
-        response.json().then((data) => helper.addMessageBodyChats(data))
+    fetch(`/api/chat/${state.id}`, requestOptions).then((response) =>
+      response.json().then((data) => helper.addMessageBodyChats(data))
     );
   },
 
@@ -53,8 +58,8 @@ export default {
       method: "GET",
       redirect: "follow",
     };
-    fetch("http://localhost:5000/user/signout", requestOptions).then(
-      (response) => response.json().then((data) => helper.signOut(data))
+    fetch("/user/signout", requestOptions).then((response) =>
+      response.json().then((data) => helper.signOut(data))
     );
   },
 
@@ -71,8 +76,8 @@ export default {
       body: raw,
       redirect: "follow",
     };
-    fetch("http://localhost:5000/api/friends", requestOptions).then(
-      (response) => response.json().then((data) => helper.addNewUser(data))
+    fetch("/api/friends", requestOptions).then((response) =>
+      response.json().then((data) => helper.addNewUser(data))
     );
   },
 };

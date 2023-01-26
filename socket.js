@@ -1,8 +1,8 @@
 const dataMap = new Map();
-function socket(socket) {
+
+function root(socket) {
   socket.on("add", (data) => {
     dataMap.set(data.user, socket.id);
-    console.table(dataMap);
   });
 
   socket.on("disconnect", () => {
@@ -14,10 +14,21 @@ function socket(socket) {
   });
 
   socket.on("message", (data) => {
-    socket
-      .to(dataMap.get(data.to))
-      .emit("message", { id: socket.id, message: data });
+    socket.to(dataMap.get(data.to)).emit("message", data);
   });
 }
 
-module.exports = socket;
+function room(socket) {
+  socket.on("add", (data) => {
+    socket.join(data.room);
+  });
+  socket.on("message", (data) => {
+    socket.to(data.room).emit("message", data);
+  });
+}
+
+function initSocket(io) {
+  io.of("/").on("connection", root);
+  io.of("/room").on("connection", room);
+}
+module.exports = { init: initSocket };

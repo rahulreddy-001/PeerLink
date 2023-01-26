@@ -3,34 +3,22 @@ import query from "./query.js";
 import state from "./state.js";
 import socket from "./socket.js";
 
-const initializeAll = () => {
-  var requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
-  fetch("http://localhost:5000/api/user", requestOptions).then((response) =>
-    response.json().then((data) => {
-      state.setCurrentUser(data.user);
-      helper.init();
-      socket.init();
-    })
-  );
-};
 window.addEventListener("load", () => {
-  initializeAll();
+  query.initializeAll();
 
   document.querySelector(".inpis").addEventListener("click", (e) => {
-    const msgInp = document.querySelector(
-      "body > div > div.mb > div.inpm > input[type=text]"
-    );
+    const msgInp = document.querySelector(".inpMsg");
     let message = msgInp.value;
-    query.putChat(message);
-    socket.emitMessage({
+    let msgJSON = {
       from: state.user,
       to: state.id,
       message: message,
       createdAt: new Date(),
-    });
+    };
+    state.isRoom ? helper.putRoomChat(msgJSON) : query.putChat(message);
+    state.isRoom
+      ? socket.emitRoomMessage(msgJSON)
+      : socket.emitMessage(msgJSON);
     msgInp.value = "";
   });
 
@@ -42,5 +30,12 @@ window.addEventListener("load", () => {
     var newUserInp = document.querySelector(".nuinp");
     query.addUser(newUserInp.value);
     newUserInp.value = "";
+  });
+
+  document.querySelector(".ripis").addEventListener("click", () => {
+    var roomInp = document.querySelector(".roomInp");
+    state.setIsRoom(true);
+    helper.handleRoomJoin(roomInp.value);
+    roomInp.value = "";
   });
 });

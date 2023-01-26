@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sreefy – Where Your Faves Music Lives" />
+    <style>
+      body {
+        background-color: rgb(30, 30, 30);
+        font-family: "Courier New", Courier, monospace;
+      }
+      .div_form {
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+      }
+      .hero {
+        margin-top: 0;
+        width: 90%;
+        height: 50vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+      }
+      .input-group {
+        margin-bottom: 30px;
+        position: relative;
+      }
+      input,
+      textarea {
+        width: 96.3%;
+        padding: 10px;
+        outline: 0;
+        border: 1px solid #fff;
+        color: #fff;
+        background: transparent;
+        font-size: 15px;
+      }
+      label {
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 10px;
+        color: #fff;
+        cursor: text;
+        transition: 0.4s;
+      }
+      button {
+        padding: 10px 0;
+        color: #fff;
+        outline: none;
+        background: transparent;
+        border: 1px solid #fff;
+        width: 100%;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #fff;
+        color: #000;
+      }
+      input:focus ~ label,
+      input:valid ~ label,
+      textarea:focus ~ label,
+      textarea:valid ~ label {
+        top: -35px;
+        font-size: 14px;
+      }
+      #form_title {
+        text-align: center;
+        margin-bottom: 0px;
+        margin-top: 10vh;
+        font-size: 35px;
+        font-weight: bold;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <h3 id="form_title">Sign Up</h3>
+    <div class="hero" id="feedback_form">
+      <div class="div_form">
+        <div class="input-group">
+          <input type="id" id="id" name="Id" required />
+          <label for="id">Id</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="password" name="password" required />
+          <label for="password">Enter password</label>
+        </div>
+        <div class="input-group">
+          <input type="password2" id="password2" name="password2" required />
+          <label for="password2">Re enter password</label>
+        </div>
+        <button type="submit" id="submit">Submit</button>
+        <div class="input-group">
+          <p style="color: white">
+            Already have an account?
+            <a href="/signin">sign in here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    document.getElementById("submit").addEventListener("click", (e) => {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        username: document.querySelector("#id").value,
+        password: document.querySelector("#password").value,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:5000/user/signup", requestOptions).then(
+        (response) =>
+          response.json().then((data) => {
+            console.log(data);
+          })
+      );
+    });
+  </script>
+</html>

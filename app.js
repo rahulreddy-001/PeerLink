@@ -6,6 +6,7 @@ var logger = require("morgan");
 var passport = require("passport");
 var session = require("express-session");
 var MongoDBStore = require("connect-mongodb-session")(session);
+const path = require("path");
 
 var mongoUrl = require("./config").mongoUrl;
 var secretKey = require("./config").secretKey;
@@ -31,7 +32,7 @@ mongoose
     console.log("Error connecting to DB");
   });
 var app = express();
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -53,9 +54,22 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static("public"));
+app.get("/", function (req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect("/signin");
+  }
+});
+app.get("/signin", (req, res, next) => {
+  return res.sendFile(path.join(__dirname, "public", "signin.html"));
+});
+app.get("/signup", (req, res, next) => {
+  return res.sendFile(path.join(__dirname, "public", "signup.html"));
+});
 app.use("/user", usersRouter);
 app.use(auth);
+app.use(express.static("public"));
 app.use("/api/friends", friendsRouter);
 app.use("/api/chat", chatRouter);
 

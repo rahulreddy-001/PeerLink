@@ -47,40 +47,6 @@ router
       if (resp !== null) {
         Chats.findOne({ name: name }).then((chat) => {
           if (chat === null) {
-            Friends.findOne({ username: req.session.passport.user }).then(
-              (user) => {
-                if (user == null) {
-                  Friends.create({
-                    username: req.session.passport.user,
-                    friends: [req.params.friend],
-                  }).then((user) => {
-                    res.statusCode = 200;
-                    res.setHeader("Content-Type", "application/json");
-                    res.json(user);
-                  });
-                } else {
-                  user.friends.push(req.params.friend);
-                  user.save();
-                }
-              }
-            );
-            if (req.session.passport.user !== req.params.friend) {
-              Friends.findOne({ username: req.params.friend }).then((user) => {
-                if (user == null) {
-                  Friends.create({
-                    username: req.params.friend,
-                    friends: [req.session.passport.user],
-                  }).then((user) => {
-                    res.statusCode = 200;
-                    res.setHeader("Content-Type", "application/json");
-                    res.json(user);
-                  });
-                } else {
-                  user.friends.push(req.session.passport.user);
-                  user.save();
-                }
-              });
-            }
             Chats.create({
               name: name,
               chats: [message],

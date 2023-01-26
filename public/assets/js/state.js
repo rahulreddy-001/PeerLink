@@ -1,5 +1,5 @@
 export default {
-  user: window.localStorage.getItem("user"), //implement it
+  user: "",
   id: "",
   idStatus: "",
   setCurrentUser(user) {

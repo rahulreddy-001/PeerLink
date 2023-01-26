@@ -48,13 +48,31 @@ export default {
     );
   },
 
-  async signOut(callback) {
+  async signOut() {
     var requestOptions = {
       method: "GET",
       redirect: "follow",
     };
     fetch("http://localhost:5000/user/signout", requestOptions).then(
-      (response) => response.json().then((data) => callback(data))
+      (response) => response.json().then((data) => helper.signOut(data))
+    );
+  },
+
+  async addUser(id) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      friend: id,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    fetch("http://localhost:5000/api/friends", requestOptions).then(
+      (response) => response.json().then((data) => helper.addNewUser(data))
     );
   },
 };

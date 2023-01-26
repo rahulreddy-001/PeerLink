@@ -4,7 +4,6 @@ export default {
   init() {
     query.getFriends();
     this.addUserId();
-    this.handleCurrentId("ram001");
   },
   scrollChatBodyBottom() {
     const scrollDiv = document.querySelector(".cb");
@@ -20,8 +19,8 @@ export default {
 
   updateFriendsList(data) {
     if (data.success) {
-      const chatListDiv = document.querySelector(".f");
-      chatListDiv.innerHTML = "<h3>Recent Chats</h3>";
+      const chatListDiv = document.querySelector(".f2");
+      chatListDiv.innerHTML = "";
       data.data.friends.map((item) => {
         let tempDiv = document.createElement("div");
         tempDiv.innerText = item;
@@ -85,8 +84,36 @@ export default {
   },
 
   handleCurrentId(id) {
+    document.querySelector(".mb").style.opacity = "1";
     state.setCurrentId(id);
+    this.addMessageBodyChats({ chats: [] }); // set loading gif or icon
     this.setRoomName();
     query.getChat();
+  },
+
+  raiseError(errMsg) {
+    const errEle = document.querySelector(".err");
+    var errMsgEle = document.createElement("span");
+    errMsgEle.textContent = errMsg;
+    errEle.append(errMsgEle);
+    setTimeout(() => {
+      errMsgEle.remove();
+    }, 2000);
+  },
+
+  addNewUser(data) {
+    if (data.success) {
+      this.updateFriendsList(data);
+    } else {
+      this.raiseError(data.message);
+    }
+  },
+
+  signOut(data) {
+    if (data.success) {
+      window.location.pathname = "/";
+    } else {
+      console.log("Something went wrong");
+    }
   },
 };

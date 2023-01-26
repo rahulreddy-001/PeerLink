@@ -5,21 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSGUI</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./assets/styles/style.css">
     <script type="module" src="./assets/js/events.js"></script>
     <script type="module" src="./assets/js/helpers.js"></script>
     <script type="module" src="./assets/js/state.js"></script>
     <script type="module" src="./assets/js/query.js"></script>
+    <script type="module" src="./assets/js/socket.js"></script>
   </head>
   <body>
     <div class="con">
       <div class="fl">
         <div class="un"><div>user:<span></span></div><button class="lb">Logout</button></div>
         <div class="nu">
-          <input placeholder="userid:" type="text"></input>
+          <input placeholder="userid:" class="nuinp" type="text"></input>
           <button class="is">ADD</button>
         </div>
         <div class="f">
+          <div class="f1">
+              <div class ="err"></div>
+              <h3>Recent Chats</h3>
+            </div>
+          <div class="f2"></div>
         </div>
         <div class="rip">
           <input placeholder="roomid:" type="text"></input>

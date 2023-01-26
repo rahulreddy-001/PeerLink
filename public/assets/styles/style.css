@@ -111,6 +111,7 @@ body {
   width: 70%;
   display: grid;
   grid-template-rows: 1fr 20fr 1fr;
+  opacity: 0;
 }
 
 .cu {
@@ -204,4 +205,22 @@ body {
     margin-top: 10px;
     width: 100%;
   }
+}
+
+.err {
+  margin-top: 0px;
+  margin-bottom: -20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-height: 35px;
+}
+.err span {
+  background-color: red;
+  color: yellow;
+  font-weight: 900;
+  font-size: 13px;
+  padding: 3px 10px;
+  margin: 5px;
+  border-radius: 50px;
 }

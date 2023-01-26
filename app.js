@@ -70,6 +70,9 @@ app.get("/signup", (req, res, next) => {
 app.use("/user", usersRouter);
 app.use(auth);
 app.use(express.static("public"));
+app.get("/api/user", (req, res) => {
+  res.send({ user: req.session.passport.user });
+});
 app.use("/api/friends", friendsRouter);
 app.use("/api/chat", chatRouter);
 

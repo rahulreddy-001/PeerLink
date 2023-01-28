@@ -4,9 +4,9 @@ Welcome to the real-time messaging and video calling app built with Express, Nod
 
 ## Screenshots
 
-![App Screenshot 1](/demo/demo-ss-01.png)
+![App Screenshot 1](https://i.postimg.cc/1XZbkZ2b/demo-ss-01.png)
 
-![App Screenshot 1](/demo/demo-ss-02.png)
+![App Screenshot 2](https://i.postimg.cc/x8YFs3b2/demo-ss-02.png)
 
 ## Demo
 

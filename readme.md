@@ -1,14 +1,12 @@
 # PeerLink
 
-```
 Welcome to the real-time messaging and video calling app built with Express, Node, Peer.js, Socket.io, and MongoDB. This app allows users to connect and communicate with each other through text and video, all while storing user data securely with MongoDB.
-```
 
 ## Screenshots
 
-![App Screenshot 1](/demo//demo-ss-01.png)
+![App Screenshot 1](/demo/demo-ss-01.png)
 
-![App Screenshot 1](/demo//demo-ss-02.png)
+![App Screenshot 1](/demo/demo-ss-02.png)
 
 ## Demo
 

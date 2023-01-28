@@ -38,4 +38,15 @@ window.addEventListener("load", () => {
     helper.handleRoomJoin(roomInp.value);
     roomInp.value = "";
   });
+
+  document.querySelector(".vcb").addEventListener("click", () => {
+    if (state.isRoom) {
+    } else {
+      helper.requestId();
+    }
+  });
+
+  document.querySelector(".end").addEventListener("click", () => {
+    helper.endCall();
+  });
 });

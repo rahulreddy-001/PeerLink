@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSGUI</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
     <link rel="stylesheet" href="./assets/styles/style.css">
     <script type="module" src="./assets/js/events.js"></script>
     <script type="module" src="./assets/js/helpers.js"></script>
@@ -43,6 +44,8 @@
                 </div>
               </div>
           </div>
+            <button class="vcb">Video Call</button>
+            <button class="vab">Answer Call</button>
         </div>
         <div class="cb">
         </div>
@@ -50,6 +53,26 @@
             <input class="inpMsg" placeholder="Message" type="text"></input>
             <button class="inpis">SEND</button>
         </div>
+      </div>
+      <div class="vc">
+        <div class="vch">
+          <div class="vcrn"><span></span></div>
+        </div>
+        <div class="va">
+            <div class="vo">	
+              <video id="remote-video" autoplay></video>
+            </div>
+            <div class="vi">
+              <video id="local-video" autoplay muted></video>
+            </div>
+          </div>
+          <div class="ops">
+            <!-- Need To Be Added -->
+            <!-- <div class="so icon">SPEAKER OFF</div>
+            <div class="mute icon">MUTE</div>
+            <div class="voff icon">VIDEO OFF</div> -->
+            <div  class="end icon">END CALL</div>
+          </div>
       </div>
     </div>
   </body>

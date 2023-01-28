@@ -8,6 +8,7 @@ export default {
     this.addUserId();
     socket.init();
   },
+
   scrollChatBodyBottom() {
     const scrollDiv = document.querySelector(".cb");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
@@ -31,7 +32,6 @@ export default {
         chatListDiv.append(tempDiv);
 
         tempDiv.addEventListener("click", (e) => {
-          state.setIsRoom(false);
           this.handleCurrentId(item);
         });
       });
@@ -59,7 +59,6 @@ export default {
     let msg = chat.message;
     let moment = new Date(chat.createdAt);
     moment = moment.toLocaleString();
-
     let messageDiv = document.createElement("div");
     messageDiv.classList.add("cmb");
     messageDiv.classList.add(classLabel);
@@ -83,9 +82,10 @@ export default {
   },
 
   handleCurrentId(id) {
+    state.setIsRoom(false);
     document.querySelector(".mb").style.opacity = "1";
     state.setCurrentId(id);
-    this.addMessageBodyChats({ chats: [] }); // set loading gif or icon
+    this.addMessageBodyChats({ chats: [] });
     this.setRoomName();
     query.getChat();
   },
@@ -102,7 +102,7 @@ export default {
 
   addNewUser(data) {
     if (data.success) {
-      this.updateFriendsList(data);
+      this.updateFriendsList({ success: true, data: { friends: data.data } });
     } else {
       this.raiseError(data.message);
     }
@@ -127,5 +127,102 @@ export default {
     this.setRoomName();
     this.addMessageBodyChats({ chats: [] });
     this.updateChatUserStatus();
+  },
+
+  localStream: null,
+  remoteVideo: document.getElementById("remote-video"),
+  localVideo: document.getElementById("local-video"),
+
+  initVideo() {
+    document.querySelector(
+      "body > div > div.vc > div.vch > div > span"
+    ).innerText = `call:${state.user}-${state.id}`;
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        this.localStream = stream;
+        this.localVideo.srcObject = stream;
+        socket.initPeer();
+      });
+    document.querySelector(".vcb").style.display = "none";
+    document.querySelector(".vc").style.display = "grid";
+    document.querySelector(".mb").style.width = "35%";
+  },
+
+  closeVideo() {
+    document.querySelector(".vc").style.display = "none";
+    document.querySelector(".mb").style.width = "70%";
+    document.querySelector(".vcb").style.display = "block";
+    document.querySelector(".vab").style.display = "none";
+    try {
+      this.localVideo.pause();
+      this.localVideo.srcObject = null;
+      let tracks = this.localStream.getTracks();
+      for (let track of tracks) track.stop();
+    } catch (err) {
+      console.log(err.message);
+    }
+  },
+
+  handleGetId(data) {
+    console.log("handling getId", data);
+    if (state.onCall) {
+      socket.busyCall({
+        to: data.from,
+        from: state.id,
+        message: `${state.id} in another call`,
+      });
+    } else {
+      if (state.id !== data.from) {
+        this.handleCurrentId(data.from);
+      }
+      this.initCall(data);
+    }
+  },
+
+  handleResId(data) {
+    console.log("handling resId", data);
+    socket.callPeer(data.peerId);
+  },
+
+  initCall(data) {
+    document.querySelector(".vcb").style.display = "none";
+    document.querySelector(".vab").style.display = "block";
+    this.raiseError(
+      `Call from ${data.from}, Click Answer Call Btn to answer.`,
+      10000
+    );
+    this.initVideo();
+    document.querySelector(".vab").addEventListener("click", () => {
+      document.querySelector(".vab").style.display = "none";
+      socket.responseId({
+        to: data.from,
+        from: data.to,
+        peerId: state.peerId,
+      });
+    });
+  },
+
+  requestId() {
+    this.initVideo();
+    socket.requestId({
+      from: state.user,
+      to: state.id,
+    });
+  },
+
+  endCall() {
+    this.closeVideo();
+    socket.closePeer({
+      to: state.id,
+      from: state.user,
+      message: `Call was closed by ${state.user}`,
+    });
+  },
+
+  endCallRequest(data) {
+    this.closeVideo();
+    this.raiseError(data.message, 5000);
+    socket.closePeerRequest();
   },
 };

@@ -4,6 +4,8 @@ export default {
   id: "",
   idStatus: "",
   isRoom: false,
+  peerId: "",
+  onCall: false,
   setCurrentUser(user) {
     this.user = user;
     helper.init();
@@ -16,5 +18,11 @@ export default {
   },
   setIsRoom(status) {
     this.isRoom = status;
+  },
+  setPeerId(id) {
+    this.peerId = id;
+  },
+  setOnCall(status) {
+    this.onCall = status;
   },
 };

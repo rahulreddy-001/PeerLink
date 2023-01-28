@@ -16,6 +16,18 @@ function root(socket) {
   socket.on("message", (data) => {
     socket.to(dataMap.get(data.to)).emit("message", data);
   });
+
+  socket.on("getId", (data) => {
+    socket.to(dataMap.get(data.to)).emit("getId", data);
+  });
+
+  socket.on("resId", (data) => {
+    socket.to(dataMap.get(data.to)).emit("resId", data);
+  });
+
+  socket.on("endCall", (data) => {
+    socket.to(dataMap.get(data.to)).emit("endCall", data);
+  });
 }
 
 function room(socket) {

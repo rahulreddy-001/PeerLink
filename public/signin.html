@@ -120,8 +120,11 @@
 
       fetch("/user/signin", requestOptions).then((response) => {
         response.json().then((data) => {
-          if (data.success) window.localStorage.setItem("user", user);
-          window.location.pathname = "/";
+          if (data.success) window.location.pathname = "/";
+          else {
+            alert(`${data.error.name} - ${data.error.message}`);
+            window.location.pathname = "/signin";
+          }
         });
       });
     });

@@ -1,14 +1,12 @@
 var express = require("express");
-var Chats = require("../models/chats");
-var User = require("../models/user");
-var Friends = require("../models/friends");
-
+var Chats = require("../database/models/chats");
+var User = require("../database/models/user");
 var router = express();
 
 router
   .route("/:friend")
   .get((req, res, next) => {
-    let name = [req.session.passport.user, req.params.friend].sort().join(" ");
+    let name = [req.username, req.params.friend].sort().join(" ");
 
     User.findOne({ username: req.params.friend }).then((resp) => {
       if (resp !== null) {
@@ -37,9 +35,9 @@ router
     });
   })
   .put((req, res, next) => {
-    let name = [req.session.passport.user, req.params.friend].sort().join(" ");
+    let name = [req.username, req.params.friend].sort().join(" ");
     let message = {
-      from: req.session.passport.user,
+      from: req.username,
       to: req.params.friend,
       message: req.body.message,
     };
@@ -87,3 +85,6 @@ router
   });
 
 module.exports = router;
+
+// router.get("/")
+// router.put("/")

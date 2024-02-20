@@ -122,7 +122,7 @@
         response.json().then((data) => {
           if (data.success) window.location.pathname = "/";
           else {
-            alert(`${data.error.name} - ${data.error.message}`);
+            alert(`${data.message}`);
             window.location.pathname = "/signin";
           }
         });
